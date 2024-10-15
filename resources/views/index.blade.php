@@ -19,7 +19,7 @@
                             corrupti eos quibusdam qui magni at!
                         </p>
                         <div class="flex justify-center mt-16">
-                            <a href="login.html">
+                            <a href="{{route('login')}}">
                                 <button class="text-2xl bg-fuchsia-600 py-4 px-7 rounded-full active:translate-y-1 active:bg-fuchsia-700 transition ease-in-out">
                                     START NOW
                                 </button>
