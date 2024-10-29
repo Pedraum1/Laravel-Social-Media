@@ -11,19 +11,25 @@
             <h1 class="text-5xl text-center">Login</h1>
             <hr class="text-gray-500 mt-5 mb-10">
 
-            <form action="" method="POST">
+            <form action="{{route('login_submit')}}" method="POST">
                 @csrf
                 <div class="mb-6">
                     <label for="email" class="text-2xl">Email</label>
-                    <input type="text" name="emailInput" id="email" class="block w-full bg-slate-100 p-4 text-lg pb-2 border-0 border-b-2 border-gray-500 focus:ring-0 outline-none focus:border-fuchsia-500 transition ease-in-out">
+                    <input type="text" name="emailInput" id="email" value="{{old('emailInput')}}" class="block w-full bg-slate-100 p-4 text-lg pb-2 border-0 border-b-2 border-gray-500 focus:ring-0 outline-none focus:border-fuchsia-500 transition ease-in-out">
+                    @error('emailInput')
+                        <p class="text-red-600">{{$message}}</p>
+                    @enderror
                 </div>
                 
                 <div class="mb-3">
                     <label for="senha" class="text-2xl">Senha</label>
                     <div class="relative">
-                        <input type="password" name="senhaInput" id="password" class="block w-full bg-slate-100 p-4 text-lg pb-2 border-0 border-b-2 border-gray-500 focus:ring-0 outline-none focus:border-fuchsia-500 transition ease-in-out">
-                        <i class="fa-regular fa-eye absolute top-1/2 right-3 -translate-y-1/2 text-xl hover:cursor-pointer" id="toggle" onclick="togglePass()"></i>
+                        <input type="password" name="passwordInput" id="password" value="{{old('passwordInput')}}" class="block w-full bg-slate-100 p-4 text-lg pb-2 border-0 border-b-2 border-gray-500 focus:ring-0 outline-none focus:border-fuchsia-500 transition ease-in-out">
+                        <i class="fa-regular fa-eye absolute top-1/2 right-3 -translate-y-1/2 text-xl hover:cursor-pointer" id="toggle"></i>
                     </div>
+                    @error('passwordInput')
+                        <p class="text-red-600">{{$message}}</p>
+                    @enderror
                 </div>
                 
                 <p class="text-center">esqueceu a senha? <a href="" class="text-fuchsia-600 underline">Clique aqui</a></p>
@@ -43,6 +49,6 @@
             <p class="text-center">Não possui conta? <a href="{{route('register')}}" class="text-fuchsia-600 underline">Cadastre-se</a></p>
         </div>
 
-        <script src="{{ asset('assets/js/auth.js') }}"></script>
+        <script src="{{ asset('assets/js/loginAuth.js') }}"></script>
     </body>
 @endsection

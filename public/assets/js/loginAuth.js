@@ -2,7 +2,7 @@ var toggle = false;
 const passInput = document.getElementById('password');
 const toggleButton = document.getElementById('toggle');
 
-function togglePass(){
+toggleButton.addEventListener('click',function(){
     if(toggle == false){
         passInput.type = "text";
         toggleButton.classList.add('fa-eye-slash');
@@ -14,4 +14,5 @@ function togglePass(){
         toggleButton.classList.remove('fa-eye-slash');
     }
     toggle = !toggle;
-}
+    
+});
