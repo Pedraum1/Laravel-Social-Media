@@ -5,11 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
-{
-
-    public static function loginExists($email,$password){
-    }
-        
+{        
     /**
      * use the parameter $option as False|Null or True to change between
      * returning if login exists or returning a user object respectively.

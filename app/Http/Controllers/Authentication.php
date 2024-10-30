@@ -22,12 +22,15 @@ class Authentication extends Controller
 
     public function register(Request $request){
         Auth::validateRegister($request);
-        //TODO CRIAR SISTEMA DE REGISTRO
-        return $request->all();
+        $user = Auth::createNewUser($request);
+        session(['user'=>Auth::getUserInfos($user)]);
+        return redirect()->route('home');
     }
 
     public function logout(){
-        session()->destroy();
+        session()->forget('user');
         return redirect()->route('index');
     }
+
+    //TODO: add email verifying system
 }
