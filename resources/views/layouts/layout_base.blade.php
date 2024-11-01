@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ asset('assets/libs/fontawesome/all.min.css') }}">
 
   {{-- title --}}
-  <title>@yield('title_base') | Tchola Social</title>
+  <title>@yield('title_base') | {{env('APP_NAME')}}</title>
 
 </head>
     @yield('body')

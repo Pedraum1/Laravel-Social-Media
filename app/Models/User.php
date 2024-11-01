@@ -16,7 +16,7 @@ class User extends Model
      * @return true|false|User
      */
     public static function getLoginOrUser($email,$password,$option=False){
-        $possible_user = User::where('email',$email)->first();
+        $possible_user = User::where('deleted_at',null)->where('email',$email)->first();
         if(empty($possible_user)){
             return False;
         }
@@ -24,7 +24,10 @@ class User extends Model
             return False;
         }
         if($option == True){
-            return $possible_user;
+            if($possible_user->email_verified_at != null){
+                return $possible_user;
+            }
+            return False;
         }
         return True;
     }

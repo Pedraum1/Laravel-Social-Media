@@ -2,9 +2,12 @@
 
 namespace App\Classes;
 
+use App\Mail\RegisterEmailConfirmation;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class Auth {
   public static function validateLogin(Request $request){
@@ -81,12 +84,26 @@ class Auth {
     $user->tag             = $request->input('tagInput');
     $user->followersNumber = 0;
     $user->followingNumber = 0;
-    $user->Active          = 1;
-    $user->profilePicture  = 'noProfile.webp';
-    $user->lastLogin       = Carbon::now();
+    $user->last_login       = Carbon::now();
+    $user->validation_token= Str::random(64);
     $user->save();
 
     return $user;
+  }
+
+  public static function sendValidationEmailTo(User $user){
+    $confirmation_link = route('validation',['token'=>$user->validation_token]);
+    Mail::to($user->email)->send(new RegisterEmailConfirmation($user->username,$confirmation_link));
+  }
+
+  public static function validateUserEmail($token){
+    $user = User::where('deleted_at',null)->where('email_verified_at',null)->where('validation_token',$token)->first();
+    if($user){
+      $user->email_verified_at = Carbon::now();
+      $user->save();
+      return $user;
+    }
+    return False;
   }
 
 }
