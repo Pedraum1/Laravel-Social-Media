@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Authentication;
 use App\Http\Controllers\Main;
+use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\HasEmailToValidate;
 use App\Http\Middleware\NotVerified;
 use App\Http\Middleware\Verified;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(Verified::class)->group(function(){
     Route::get('/home',[Main::class,'home'])->name('home');
     Route::get('/logout',[Authentication::class,'logout'])->name('logout');
+
+    Route::get('/profile/{tag}',[ProfileController::class,'profile'])->name('profile');
 });
 
 //Not authenticated user routes
