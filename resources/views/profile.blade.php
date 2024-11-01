@@ -1,7 +1,7 @@
 @extends('layouts.layout_main')
 
 @section('title')
-    Página Inicial
+    {{$username}}
 @endsection
 
 @section('content')
@@ -10,9 +10,11 @@
         <img src="{{asset('storage').'/'.$banner_img}}" class="object-cover h-1/2 w-full flex flex-col">
         <div class="relative flex flex-row mb-24">
             <img src="{{asset('storage').'/'.$profile_img}}" class="w-40 absolute -translate-y-1/2 lg:left-6 left-2 rounded-full ">
-            <div class="absolute lg:right-6 right-2 lg:top-6 top-4" data-modal-target="editProfile-modal" data-modal-toggle="editProfile-modal">
-                <button class="p-4 bg-fuchsia-600 rounded-full hover:bg-fuchsia-500 font-bold">Editar Perfil</button>
-            </div>
+            @if (session('user.tag')==$tag)
+                <div class="absolute lg:right-6 right-2 lg:top-6 top-4" data-modal-target="editProfile-modal" data-modal-toggle="editProfile-modal">
+                    <button class="p-4 bg-fuchsia-600 rounded-full hover:bg-fuchsia-500 font-bold">Editar Perfil</button>
+                </div>
+            @endif
         </div>
         <div class="mx-5">
             <h1 class="text-2xl font-semibold">{{$profile_img}}</h1>
@@ -78,6 +80,7 @@
                             <div class="p-4 md:p-5">
                                 <button type="submit" class="w-full  text-white bg-fuchsia-600 hover:bg-fuchsia-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Salvar</button>
                             </div>
+                            <input type="hidden" name="tagInput" value="{{session('user.tag')}}">
                         </form>
                     </div>
                 </div>
