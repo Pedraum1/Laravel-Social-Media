@@ -3,7 +3,7 @@
             <div class="mx-10">
                 <ul>
                     <li class="mt-8 mb-4 ms-4">
-                        <a href=""></a><img src="assets/images/noProfile.webp" class="w-14 h-14 rounded-full">
+                        <a href=""></a><img src="{{asset('storage').'/'.session('user.profile_img')}}" class="w-14 h-14 rounded-full">
                     </li>
                     <a href="">
                         <li class="my-2 p-4 text-xl font-semibold hover:bg-zinc-700 hover:rounded-xl">
@@ -30,7 +30,7 @@
                             <i class="fa-solid fa-list"></i> Listas
                         </li>
                     </a>
-                    <a href="">
+                    <a href="{{route('profile',session('user.tag'))}}">
                         <li class="my-2 p-4 text-xl font-semibold hover:bg-zinc-700 hover:rounded-xl">
                             <i class="fa-solid fa-user"></i> Perfil
                         </li>

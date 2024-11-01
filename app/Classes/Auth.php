@@ -60,7 +60,7 @@ class Auth {
       'email'           => $user->email,
       'username'        => $user->username,
       'tag'             => $user->tag,
-      'profile_picture' => $user->profilePicture
+      'profile_img' =>     Profile::profileImage($user)
     ];
     return $user;
   }
