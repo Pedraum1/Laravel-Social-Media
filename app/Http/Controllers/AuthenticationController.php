@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
-class Authentication extends Controller
+class AuthenticationController extends Controller
 {
     public function login(Request $request){
         Auth::validateLogin($request);
