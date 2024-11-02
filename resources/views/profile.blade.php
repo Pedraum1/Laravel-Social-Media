@@ -17,7 +17,7 @@
             @endif
         </div>
         <div class="mx-5">
-            <h1 class="text-2xl font-semibold">{{$profile_img}}</h1>
+            <h1 class="text-2xl font-semibold">{{$username}}</h1>
             <p class="text-zinc-400 hover:underline"><a href="/profile/{{$tag}}">@ {{$tag}}</a></p>
             <p class="text-zinc-400">
                 <a class="hover:underline" href=""><span class="font-bold text-white">{{$followers_num}}</span> seguidores</a>

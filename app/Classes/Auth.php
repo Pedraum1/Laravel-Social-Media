@@ -88,6 +88,8 @@ class Auth {
     $user->validation_token= Str::random(64);
     $user->save();
 
+    session(['email_validation'=>$user->email]);
+
     return $user;
   }
 
