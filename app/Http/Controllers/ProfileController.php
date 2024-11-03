@@ -17,4 +17,11 @@ class ProfileController extends Controller
         $profile_data = Profile::organizeProfileData($profile);
         return view('profile',$profile_data);
     }
+
+    public function updateProfile(Request $request){
+        Profile::validateLoginUpdate($request);
+        $user = User::getUserByTag(session('user.tag'));
+        Profile::updateProfile($request,$user);
+        return redirect()->back();
+    }
 }

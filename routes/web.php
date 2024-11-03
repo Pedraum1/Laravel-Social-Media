@@ -13,7 +13,10 @@ Route::middleware(Verified::class)->group(function(){
     Route::get('/home',[MainController::class,'home'])->name('home');
     Route::get('/logout',[AuthenticationController::class,'logout'])->name('logout');
 
-    Route::get('/profile/{tag}',[ProfileController::class,'profile'])->name('profile');
+    Route::prefix('profile')->group(function(){
+        Route::get('{tag}',[ProfileController::class,'profile'])->name('profile');
+        Route::post('update',[ProfileController::class,'updateProfile'])->name('profileUpdate');
+    });
 });
 
 //Not authenticated user routes
