@@ -20,7 +20,7 @@
                                 <!-- Modal body -->
                                 <div class="p-4 md:p-5 flex justify-center gap-x-5">
                                     <div>
-                                        <img src="assets/images/noProfile.webp" class="w-14 rounded-full">
+                                        <img src="{{ asset('storage').'/'.session('user.profile_img')}}" class="w-14 rounded-full">
                                     </div>
                                     <div class="w-5/6">
                                         <textarea name="" id="" rows="5" maxlength="150" placeholder="O que está pensando?" class="w-full bg-zinc-900 outline-none focus:ring-0 border-none resize-none text-xl" oninput="autoGrow(this); countCharacters(this)"></textarea>

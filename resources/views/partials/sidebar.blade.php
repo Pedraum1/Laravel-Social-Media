@@ -3,7 +3,7 @@
             <div class="mx-10">
                 <ul>
                     <li class="mt-8 mb-4 ms-4">
-                        <a href="{{route('profile',session('user.tag'))}}"><img src="{{asset('storage').'/'.session('user.profile_img')}}" class="w-14 h-14 rounded-full"></a>
+                        <a href="{{route('profile',session('user.tag'))}}"><img src="{{asset('storage/images').'/'.session('user.profile_img')}}" class="w-14 h-14 rounded-full"></a>
                     </li>
                     <a href="{{route('home')}}">
                         <li class="my-2 p-4 text-xl font-semibold hover:bg-zinc-700 hover:rounded-xl">
