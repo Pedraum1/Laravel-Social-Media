@@ -35,7 +35,7 @@
                 <!-- Modal content -->
                 <div class="relative bg-zinc-800 rounded-lg shadow">
                     <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                    <div class="flex items-center justify-between p-4 md:p-5 rounded-t">
                         <h3 class="text-xl font-semibold text-white">
                             Edite seu perfil
                         </h3>
