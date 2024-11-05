@@ -40,11 +40,6 @@
                             <i class="fa-solid fa-gear"></i> Configurações
                         </li>
                     </a>
-                    <li class="mt-12 ms-4">
-                        <button class="py-3 px-5 bg-fuchsia-600 rounded-full text-xl font-semibold text-center w-fit" data-modal-target="modal-post" data-modal-toggle="modal-post">
-                            <i class="fa-regular fa-pen-to-square"></i> Postar
-                        </button>
-                    </li>
                 </ul>
             </div>
 

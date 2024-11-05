@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class Image extends Model
+class ImageModel extends Model
 {
+
+  protected $table = 'images';
 
   private static function createImage(Request $request, $source_id, $type){
     if($type=='profile'){
-      $image = new Image();
+      $image = new ImageModel();
 
       $new_image = $request->file('profileInput');
       $new_name = Carbon::now()->format('Y-m-d_H-i-s').'-'.$new_image->getClientOriginalName();
@@ -25,7 +27,7 @@ class Image extends Model
       $image->save();
     }
     if($type='banner'){
-      $image = new Image();
+      $image = new ImageModel();
 
       $new_image = $request->file('bannerInput');
       $new_name = Carbon::now()->format('Y-m-d_H-i-s').'-'.$new_image->getClientOriginalName();
@@ -40,7 +42,7 @@ class Image extends Model
   }
 
   private static function updateImage(Request $request, $id,$type){
-    $image = Image::find($id);
+    $image = ImageModel::find($id);
     if($type=='profile'){
 
       $old_image_path = 'images/'.$image->name;
@@ -73,22 +75,22 @@ class Image extends Model
 
   }
 
-  public static function processProfileImageUpdate(Request $request, User $user){
+  public static function processProfileImageUpdate(Request $request, UserModel $user){
     if($request->file('profileInput')){
       if(!empty($user->profile_image)){
-        Image::updateImage($request, $user->profile_image->id,'profile');
+        ImageModel::updateImage($request, $user->profile_image->id,'profile');
       } else {
-        Image::createImage($request,$user->id,'profile');
+        ImageModel::createImage($request,$user->id,'profile');
       }
     }
   }
 
-  public static function processBannerImageUpdate(Request $request, User $user){
+  public static function processBannerImageUpdate(Request $request, UserModel $user){
     if($request->file('bannerInput')){
       if(!empty($user->banner_image)){
-        Image::updateImage($request, $user->banner_image->id,'banner');
+        ImageModel::updateImage($request, $user->banner_image->id,'banner');
       } else {
-        Image::createImage($request,$user->id,'banner');
+        ImageModel::createImage($request,$user->id,'banner');
       }
     }
   }

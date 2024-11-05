@@ -9,7 +9,7 @@
     <section class=" mb-5">
         <img src="{{asset('storage/images').'/'.$banner_img}}" class="object-cover max-h-[175px] w-full flex flex-col">
         <div class="relative flex flex-row mb-24">
-            <img src="{{asset('storage/images').'/'.$profile_img}}" class="w-40 absolute -translate-y-1/2 lg:left-6 left-2 rounded-full ">
+            <img src="{{asset('storage/images').'/'.$profile_img}}" class="w-40 h-40 absolute object-cover -translate-y-1/2 lg:left-6 left-2 rounded-full ">
             @if (session('user.tag')==$tag)
                 <div class="absolute lg:right-6 right-2 lg:top-6 top-4" data-modal-target="editProfile-modal" data-modal-toggle="editProfile-modal">
                     <button class="p-4 bg-fuchsia-600 rounded-full hover:bg-fuchsia-500 font-bold">Editar Perfil</button>
@@ -61,8 +61,8 @@
                                 </div>
                                 <div class="absolute left-10">                                            
                                     <div class="relative w-32 h-32">
-                                        <div class="absolute top-0 -translate-y-1/2 h-32 w-32 ">
-                                            <img src="{{asset('storage/images').'/'.$profile_img}}" id="profileImage" alt="profile photo" class="rounded-full border-zinc-700">
+                                        <div class="absolute top-0 -translate-y-1/2">
+                                            <img src="{{asset('storage/images').'/'.$profile_img}}" id="profileImage" alt="profile photo" class="rounded-full h-32 w-32 object-cover border-zinc-700">
                                         </div>
                                         <div id="addProfileButton" class="relative z-10 left-1/2 -translate-x-1/2 -translate-y-1/2 h-16 w-16 bg-zinc-950 opacity-40 rounded-full hover:opacity-70 transition-opacity duration-300 ease-in-out cursor-pointer flex justify-center items-center">
                                             <i class="fa-solid fa-camera fa-2xl"></i>
@@ -124,6 +124,9 @@
         </button>
     </div>
     <!--fim da profile navbar-->
+    @foreach ($posts as $post)
+        <livewire:post :post_id="$post->id"/>
+    @endforeach
 
 @endsection
 

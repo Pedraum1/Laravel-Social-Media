@@ -17,6 +17,11 @@ Route::middleware(Verified::class)->group(function(){
         Route::get('{tag}',[ProfileController::class,'profile'])->name('profile');
         Route::post('update',[ProfileController::class,'updateProfile'])->name('profileUpdate');
     });
+
+    Route::prefix('/post')->group(function(){
+        Route::get('{id}',[MainController::class,'post'])->name('seePost');
+        Route::get('/delete/{id}',[MainController::class,'deletePost'])->name('deletePost');
+    });
 });
 
 //Not authenticated user routes

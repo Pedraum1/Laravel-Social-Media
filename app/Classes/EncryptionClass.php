@@ -6,7 +6,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Support\Facades\Crypt;
 
-class Encryption{
+class EncryptionClass{
 
   public static function encryptId(int $id): string|null
   {

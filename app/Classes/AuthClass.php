@@ -3,13 +3,13 @@
 namespace App\Classes;
 
 use App\Mail\RegisterEmailConfirmation;
-use App\Models\User;
+use App\Models\UserModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-class Auth {
+class AuthClass {
   public static function validateLogin(Request $request){
 
     $request->validate([
@@ -54,13 +54,13 @@ class Auth {
 
   }
 
-  public static function getUserInfos(User $user){
+  public static function getUserInfos(UserModel $user){
     $user = [
-      'id'              => Encryption::encryptId($user->id),
+      'id'              => EncryptionClass::encryptId($user->id),
       'email'           => $user->email,
       'username'        => $user->username,
       'tag'             => $user->tag,
-      'profile_img' =>     Profile::profileImage($user)
+      'profile_img' =>     ProfileClass::profileImage($user)
     ];
     return $user;
   }
@@ -69,14 +69,14 @@ class Auth {
     $email = $request->input('emailInput');
     $password = $request->input('passwordInput');
 
-    if(User::getLoginOrUser($email,$password)){
+    if(UserModel::getLoginOrUser($email,$password)){
       return True;
     }
     return False;
   }
 
   public static function createNewUser(Request $request){
-    $user = new User();
+    $user = new UserModel();
 
     $user->email           = $request->input('emailInput');
     $user->password        = bcrypt($request->input('passwordInput'));
@@ -93,13 +93,13 @@ class Auth {
     return $user;
   }
 
-  public static function sendValidationEmailTo(User $user){
+  public static function sendValidationEmailTo(UserModel $user){
     $confirmation_link = route('validation',['token'=>$user->validation_token]);
     Mail::to($user->email)->send(new RegisterEmailConfirmation($user->username,$confirmation_link));
   }
 
   public static function validateUserEmail($token){
-    $user = User::where('deleted_at',null)->where('email_verified_at',null)->where('validation_token',$token)->first();
+    $user = UserModel::where('deleted_at',null)->where('email_verified_at',null)->where('validation_token',$token)->first();
     if($user){
       $user->email_verified_at = Carbon::now();
       $user->save();

@@ -2,32 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\Auth;
-use App\Models\User;
+use App\Classes\AuthClass;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class AuthenticationController extends Controller
 {
     public function login(Request $request){
-        Auth::validateLogin($request);
-        if(Auth::existsUserWithThisLogin($request)){
+        AuthClass::validateLogin($request);
+        if(AuthClass::existsUserWithThisLogin($request)){
             $email = $request->input('emailInput');
             $password = $request->input('passwordInput');
-            $user = User::getLoginOrUser($email,$password,True);
+            $user = UserModel::getLoginOrUser($email,$password,True);
             if(!$user){
                 return redirect()->back()->withInput()->with(['validation_errors'=>True]);
             }
-            session(['user'=>Auth::getUserInfos($user)]);
+            session(['user'=>AuthClass::getUserInfos($user)]);
             return redirect()->route('home');
         }
         return redirect()->back()->withInput()->with(['validation_errors'=>True]);
     }
 
     public function register(Request $request){
-        Auth::validateRegister($request);
-        $user = Auth::createNewUser($request);
-        Auth::sendValidationEmailTo($user);
+        AuthClass::validateRegister($request);
+        $user = AuthClass::createNewUser($request);
+        AuthClass::sendValidationEmailTo($user);
 
         return redirect()->route('validation_sended')->with(['email_validation'=>$user->email]);
     }
@@ -38,9 +37,9 @@ class AuthenticationController extends Controller
     }
 
     public function validatingEmail($token){
-        $user = Auth::validateUserEmail($token);
+        $user = AuthClass::validateUserEmail($token);
         if($user){
-            session(['user'=>Auth::getUserInfos($user)]);
+            session(['user'=>AuthClass::getUserInfos($user)]);
             return redirect()->route('home');
         }
         return abort(404);
