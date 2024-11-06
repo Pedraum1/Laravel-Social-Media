@@ -4,6 +4,8 @@ namespace App\Classes;
 
 use App\Models\ImageModel;
 use App\Models\UserModel;
+use App\Rules\ProfileNameLength;
+use App\Rules\BannerNameLength;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -43,8 +45,8 @@ class ProfileClass{
   public static function validateLoginUpdate(Request $request){
     $request->validate([
       'nameInput'        => 'required|min:6|max:30',
-      'profileInput'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-      'bannerInput'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096'
+      'profileInput'     => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048', new ProfileNameLength(60)],
+      'bannerInput'      => ['nullable','image','mimes:jpg,jpeg,png,webp','max:4096', new BannerNameLength(60)]
     ],[
       'nameInput.required' => 'O Campo de nome precisa estar preenchido',
       'nameInput.min'      => 'O Nome deve ter mais que 6 caracteres',
