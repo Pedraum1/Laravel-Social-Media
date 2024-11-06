@@ -54,6 +54,6 @@ class UserModel extends Model
     }
 
     public function posts(): HasMany{
-        return $this->hasMany(PostModel::class,'user_id','id')->where('deleted_at',null)->where('type','post');
+        return $this->hasMany(PostModel::class,'user_id','id')->where('deleted_at',null)->where('type','post')->orderBy('created_at','desc');
     }
 }
