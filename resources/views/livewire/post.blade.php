@@ -2,7 +2,7 @@
     <!--post com fotos-->
     <section class="flex flex-row pb-3 p-5 border-b-2 border-zinc-700">
         <div class="me-3">
-            <img src="{{asset('storage/images').'/'}}{{!empty($post->owner->profile_image) ? $post->owner->profile_image->name->name : 'noProfile.webp'}}" class="w-14 rounded-full">
+            <img src="{{asset('storage/images').'/'}}{{!empty($post->owner->profile_image) ? $post->owner->profile_image->name : 'noProfile.webp'}}" class="w-14 rounded-full">
         </div>
         <div class="w-full">
             <!--header do post-->
