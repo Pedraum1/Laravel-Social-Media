@@ -37,6 +37,14 @@ class UserModel extends Model
         return True;
     }
 
+    public static function getUserByEmail($email): bool{
+        $possible_user = UserModel::getAliveUser()->where('email',$email)->first();
+        if($possible_user){
+            return True;
+        }
+        return False;
+    }
+
     public static function getAliveUser(){
         return UserModel::where('deleted_at',null)->where('active',1)->whereNotNull('email_verified_at')->get();
     }

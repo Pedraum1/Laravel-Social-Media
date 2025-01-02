@@ -32,7 +32,7 @@
                     @enderror
                 </div>
                 
-                <p class="text-center">esqueceu a senha? <a href="" class="text-fuchsia-600 underline">Clique aqui</a></p>
+                <p class="text-center">esqueceu a senha? <a href="{{route('sendEmailToRecover')}}" class="text-fuchsia-600 underline">Clique aqui</a></p>
                 
                 <div class="mt-8 mb-12">
                     <button type="submit" class="text-2xl bg-fuchsia-600 py-3 px-5 text-slate-100 shadow-xl w-full mb-4 hover:bg-fuchsia-500 active:bg-fuchsia-700 transition ease-in-out">

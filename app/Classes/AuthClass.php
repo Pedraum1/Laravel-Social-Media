@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Mail\RegisterEmailConfirmation;
+use App\Mail\reset_password;
 use App\Models\UserModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -106,6 +107,11 @@ class AuthClass {
       return $user;
     }
     return False;
+  }
+
+  public static function sendRecoverEmailTo($email,$token){
+    $reset_link = route('recoverPassword',['token'=>$token]);
+    Mail::to($email)->send(new reset_password($reset_link));
   }
 
 }
