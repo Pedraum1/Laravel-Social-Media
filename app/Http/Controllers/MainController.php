@@ -10,7 +10,7 @@ class MainController extends Controller
 {
     public function home(){
 
-        $posts = PostModel::orderBy('created_at','DESC')->where('deleted_at',null)->where('type','post')->get();
+        $posts = PostModel::orderBy('created_at','DESC')->where('deleted_at',null)->where('type','post')->paginate(25);
         
         $post_array = [];
         foreach($posts as $post){
