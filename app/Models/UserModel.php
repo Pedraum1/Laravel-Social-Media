@@ -50,14 +50,35 @@ class UserModel extends Model
     }
 
     public function profile_image(): HasOne {
-        return $this->hasOne(ImageModel::class,'source_id','id')->where('deleted_at',null)->where('type','profile');
+        $image = $this->hasOne(ImageModel::class,'source_id','id')
+                      ->where('deleted_at',null)
+                      ->where('type','profile');
+                      
+        if($image->exists()){
+            return $image;
+        }
+        ImageModel::generateNoProfileImage($this->id,"profile");
+
+        return $this->profile_image();
     }
 
     public function banner_image(): HasOne {
-        return $this->hasOne(ImageModel::class,'source_id','id')->where('deleted_at',null)->where('type','banner');
+        $image = $this->hasOne(ImageModel::class,'source_id','id')
+                      ->where('deleted_at',null)
+                      ->where('type','banner');
+
+        if($image->exists()){
+            return $image;
+        }
+        ImageModel::generateNoProfileImage($this->id,"banner");
+
+        return $this->banner_image();
     }
 
     public function posts(): HasMany{
-        return $this->hasMany(PostModel::class,'user_id','id')->where('deleted_at',null)->where('type','post')->orderBy('created_at','desc');
+        return $this->hasMany(PostModel::class,'user_id','id')
+                    ->where('deleted_at',null)
+                    ->where('type','post')
+                    ->orderBy('created_at','desc');
     }
 }
