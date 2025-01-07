@@ -11,38 +11,34 @@ class UserModel extends Model
 
     protected $table = 'users';
 
-    /**
-     * use the parameter $option as False|Null or True to change between
-     * returning if login exists or returning a user object respectively.
-     *
-     * @param  string $email
-     * @param  string $password
-     * @param  bool $option
-     * @return true|false|UserModel
-     */
-    public static function getLoginOrUser($email,$password,$option=False){
+    public static function thisLoginExists($email, $password){
+        if(UserModel::getLogin($email,$password)){
+            return True;
+        }
+        return False;
+    }
+
+    private static function getLogin($email,$password){
         $possible_user = UserModel::where('deleted_at',null)->where('email',$email)->first();
         if(empty($possible_user)){
             return False;
         }
+
         if(!password_verify($password, $possible_user->password)){
             return False;
         }
-        if($option == True){
-            if($possible_user->email_verified_at != null){
-                return $possible_user;
-            }
-            return False;
+
+        if($possible_user->email_verified_at != null){
+            return $possible_user;
         }
-        return True;
+
+        return False;
     }
 
-    public static function getUserByEmail($email): bool{
-        $possible_user = UserModel::getAliveUser()->where('email',$email)->first();
-        if($possible_user){
-            return True;
-        }
-        return False;
+    public static function getUserByEmail($email): bool|UserModel{
+        return UserModel::getAliveUser()
+                        ->where('email',$email)
+                        ->first();
     }
 
     public static function getAliveUser(){

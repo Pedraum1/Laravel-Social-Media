@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Classes\AuthClass;
 use App\Classes\EncryptionClass;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\UserModel;
 use App\Models\RecoverModel;
 use Carbon\Carbon;
@@ -12,23 +14,33 @@ use Illuminate\Support\Str;
 
 class AuthenticationController extends Controller
 {
-    public function login(Request $request){
-        AuthClass::validateLogin($request);
-        if(AuthClass::existsUserWithThisLogin($request)){
-            $email = $request->input('emailInput');
-            $password = $request->input('passwordInput');
-            $user = UserModel::getLoginOrUser($email,$password,True);
+
+    public function login(LoginRequest $request){
+
+        $credentials = $request->validated();
+        $email = $credentials['emailInput'];
+        $password = $credentials['passwordInput'];
+
+        if(UserModel::thisLoginExists($email, $password)){
+            $user = UserModel::getUserByEmail($email);
+
             if(!$user){
-                return redirect()->back()->withInput()->with(['validation_errors'=>True]);
+                return redirect()->back()
+                                 ->withInput()
+                                 ->with(['validation_errors'=>True]);
             }
+
             session(['user'=>AuthClass::getUserInfos($user)]);
             return redirect()->route('home');
         }
+        
         return redirect()->back()->withInput()->with(['validation_errors'=>True]);
     }
 
-    public function register(Request $request){
-        AuthClass::validateRegister($request);
+    public function register(RegisterRequest $request){
+
+        $credentials = $request->validated();
+
         $user = AuthClass::createNewUser($request);
         AuthClass::sendValidationEmailTo($user);
 
