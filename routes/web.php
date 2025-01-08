@@ -26,6 +26,7 @@ Route::middleware(Verified::class)->group(function(){
 
 //Not authenticated user routes
 Route::middleware(NotVerified::class)->group(function(){
+
     Route::view('/','index')->name('index');
 
     Route::view('/login','auth.login')->name('login');
@@ -37,7 +38,7 @@ Route::middleware(NotVerified::class)->group(function(){
     Route::get('/validation',[AuthenticationController::class,'emailValidationPage'])->middleware(HasEmailToValidate::class)->name('validation_sended');
     Route::get('/validation/{token}',[AuthenticationController::class,'validatingEmail'])->name('validation');
 
-    Route::view('/recover','auth.sendResetLink')->name('sendEmailToRecover');
+    Route::view('/recover','auth.SendResetLink')->name('sendEmailToRecover');
     Route::post('/recover_submit',[AuthenticationController::class,'sendResetEmail'])->name('sendResetEmail');
     Route::get('/recover_password/{token}',[AuthenticationController::class,'recoverPassword'])->name('recoverPassword');
     Route::post('/recovered_password/{token}',[AuthenticationController::class,'recoveredPassword'])->name('recoveredPassword');
