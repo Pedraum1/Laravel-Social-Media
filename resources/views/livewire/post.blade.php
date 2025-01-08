@@ -6,7 +6,7 @@
             <div class="flex flex-row justify-between items-center">
                 {{-- imagem --}}
                 <div class="me-3 flex flex-row items-center gap-x-4 mb-4">
-                    <img src="{{asset('storage/images').'/'}}{{!empty($post->owner->profile_image) ? $post->owner->profile_image->name : 'noProfile.webp'}}" class="w-14 rounded-full">
+                    <img src="{{asset('storage/images').'/'}}{{!empty($post->owner->profile_image) ? $post->owner->profile_image->name : 'noProfile.webp'}}" class="w-14 h-14 rounded-full object-cover">
                     <p>
                         <span class="text-lg font-bold">{{$post->owner->username}}</span> <a class="text-zinc-400 hover:underline" href="{{route('profile',$post->owner->tag)}}">{{'@'.$post->owner->tag}}</a>  - {{$post->date}}
                     </p>

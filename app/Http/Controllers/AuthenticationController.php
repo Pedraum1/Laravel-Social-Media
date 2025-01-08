@@ -45,7 +45,6 @@ class AuthenticationController extends Controller
     }
 
     public function register(RegisterRequest $request){
-
         $credentials = $request->validated();
 
         $user = $this->createNewUser($credentials);
@@ -123,6 +122,10 @@ class AuthenticationController extends Controller
     private function createNewUser(array $credentials): UserModel{
         
         $user = UserModel::create($this->newUserInfos($credentials));
+
+        #this generates the noProfile images of user
+        $user->banner_image;
+        $user->profile_image;
 
         session(['email_validation'=>$user->email]);
 
