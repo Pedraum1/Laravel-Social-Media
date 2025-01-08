@@ -11,7 +11,9 @@ class ImageModel extends Model
 {
   
   protected $table = 'images';
-  
+
+  protected $fillable = ["source_id","type","name"];
+
   public static function processProfileImageUpdate(Request $request, UserModel $user){
     if($request->file('profileInput')){
       if(!empty($user->profile_image)){
@@ -31,6 +33,7 @@ class ImageModel extends Model
       }
     }
   }
+  
   private static function createImage(Request $request, $source_id, $type){
     if($type=='profile'){
       $image = new ImageModel();
