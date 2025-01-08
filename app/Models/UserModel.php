@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Classes\EncryptionClass;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -10,6 +12,11 @@ class UserModel extends Model
 {
 
     protected $table = 'users';
+
+    protected $fillable = ["username", "email", "password", "description",
+                           "followersNumber", "followingNumber", "postsNumber",
+                           "active", "tag", "last_login","email_verified_at",
+                           "validation_token"];
 
     public static function thisLoginExists($email, $password){
         if(UserModel::getLogin($email,$password)){
@@ -34,6 +41,17 @@ class UserModel extends Model
 
         return False;
     }
+    
+    public static function getAliveUser(){
+        return UserModel::where('deleted_at',null)->where('active',1)->whereNotNull('email_verified_at')->get();
+    }
+    
+    public static function getNonValidatedUser($token){
+        return UserModel::where('deleted_at',null)
+        ->where('email_verified_at',null)
+        ->where('validation_token',$token)
+        ->first();
+    }
 
     public static function getUserByEmail($email): bool|UserModel{
         return UserModel::getAliveUser()
@@ -41,13 +59,25 @@ class UserModel extends Model
                         ->first();
     }
 
-    public static function getAliveUser(){
-        return UserModel::where('deleted_at',null)->where('active',1)->whereNotNull('email_verified_at')->get();
-    }
-
     public static function getUserByTag(string $tag){
         return UserModel::getAliveUser()->where('tag',$tag)->first();
     }
+
+    public function getInfos():array {
+        return [
+            'user_id'     => EncryptionClass::encryptId($this->id),
+            'email'       => $this->email,
+            'username'    => $this->username,
+            'tag'         => $this->tag,
+            'profile_img' => $this->profile_image->name
+          ];
+    }
+
+    public function updatePassword($new_password):void {
+        $this->save(["password"=>bcrypt($new_password)]);
+    }
+
+    //FEATURES FUNCTIONS
 
     public function profile_image(): HasOne {
         $image = $this->hasOne(ImageModel::class,'source_id','id')
