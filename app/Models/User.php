@@ -7,9 +7,12 @@ use App\Classes\EncryptionClass;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Model
 {
+
+    use HasApiTokens;
 
     protected $table = 'users';
 
@@ -73,6 +76,17 @@ class User extends Model
           ];
     }
 
+    public function getApiInfos(): array {
+        return[
+            'user_id'     => EncryptionClass::encryptId($this->id),
+            "email"       => $this->email,
+            "username"    => $this->username,
+            "tag"         => $this->tag,
+            "profile_img" => $this->profile_image->name,
+            "token"       => $this->createToken($this->username)->plainTextToken
+        ];
+    }
+
     public function updatePassword($new_password):void {
         $this->save(["password"=>bcrypt($new_password)]);
     }
@@ -106,7 +120,7 @@ class User extends Model
     }
 
     public function posts(): HasMany{
-        return $this->hasMany(PostModel::class,'user_id','id')
+        return $this->hasMany(Post::class,'user_id','id')
                     ->where('deleted_at',null)
                     ->where('type','post')
                     ->orderBy('created_at','desc');

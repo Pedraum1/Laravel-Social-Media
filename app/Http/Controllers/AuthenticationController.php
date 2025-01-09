@@ -11,6 +11,7 @@ use App\Http\Requests\ResetPasswordRequest;
 
 use App\Mail\RegisterEmailConfirmation;
 use App\Mail\reset_password;
+
 use App\Models\User;
 use App\Models\Recover;
 
