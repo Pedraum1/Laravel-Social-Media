@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Classes\EncryptionClass;
-use App\Models\PostModel;
-use Illuminate\Http\Request;
+use App\Models\Post;
 
 class MainController extends Controller
 {
     public function home(){
 
-        $posts = PostModel::orderBy('created_at','DESC')->where('deleted_at',null)->where('type','post')->paginate(25);
+        $posts = Post::orderBy('created_at','DESC')->where('deleted_at',null)->where('type','post')->paginate(25);
         
         $post_array = [];
         foreach($posts as $post){
@@ -25,7 +24,7 @@ class MainController extends Controller
 
     public function post($id){
         $id = EncryptionClass::decryptId($id);
-        $post = PostModel::find($id);
+        $post = Post::find($id);
         if($post->getComments){
             return view('postPage',['post'=>$post,'comments'=>$post->getComments]);
         }
@@ -34,7 +33,7 @@ class MainController extends Controller
 
     public function deletePost($id){
         $id = EncryptionClass::decryptId($id);
-        $post = PostModel::find($id);
+        $post = Post::find($id);
         $post->delete();
 
         if($post->type == 'reply'){

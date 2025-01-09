@@ -7,23 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PostModel extends Model
+class Post extends Model
 {
     use HasFactory;
 
     protected $table = 'posts';
 
     public function owner(): BelongsTo {
-        return $this->belongsTo(UserModel::class,'user_id','id');
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function images(): HasMany {
-        return $this->hasMany(ImageModel::class,'source_id','id')->where('type','post');
+        return $this->hasMany(Image::class,'source_id','id')->where('type','post');
     }
 
     public static function createPost($text){
         $post = new PostModel();
-        $user = UserModel::getUserByTag(session('user.tag'));
+        $user = User::getUserByTag(session('user.tag'));
 
         $post->user_id = $user->id;
         $post->type = 'post';
@@ -38,7 +38,7 @@ class PostModel extends Model
 
     public static function createReply($text,$post_id){
         $reply = new PostModel();
-        $user = UserModel::getUserByTag(session('user.tag'));
+        $user = User::getUserByTag(session('user.tag'));
 
         $reply->user_id = $user->id;
         $reply->source_id = $post_id;

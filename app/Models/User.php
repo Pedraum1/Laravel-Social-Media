@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Classes\EncryptionClass;
-use Carbon\Carbon;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class UserModel extends Model
+class User extends Model
 {
 
     protected $table = 'users';
@@ -19,14 +19,14 @@ class UserModel extends Model
                            "validation_token"];
 
     public static function thisLoginExists($email, $password){
-        if(UserModel::getLogin($email,$password)){
+        if(User::getLogin($email,$password)){
             return True;
         }
         return False;
     }
 
     private static function getLogin($email,$password){
-        $possible_user = UserModel::where('deleted_at',null)->where('email',$email)->first();
+        $possible_user = User::where('deleted_at',null)->where('email',$email)->first();
         if(empty($possible_user)){
             return False;
         }
@@ -43,24 +43,24 @@ class UserModel extends Model
     }
     
     public static function getAliveUser(){
-        return UserModel::where('deleted_at',null)->where('active',1)->whereNotNull('email_verified_at')->get();
+        return User::where('deleted_at',null)->where('active',1)->whereNotNull('email_verified_at')->get();
     }
     
     public static function getNonValidatedUser($token){
-        return UserModel::where('deleted_at',null)
+        return User::where('deleted_at',null)
         ->where('email_verified_at',null)
         ->where('validation_token',$token)
         ->first();
     }
 
-    public static function getUserByEmail($email): bool|UserModel{
-        return UserModel::getAliveUser()
+    public static function getUserByEmail($email): bool|User{
+        return User::getAliveUser()
                         ->where('email',$email)
                         ->first();
     }
 
     public static function getUserByTag(string $tag){
-        return UserModel::getAliveUser()->where('tag',$tag)->first();
+        return User::getAliveUser()->where('tag',$tag)->first();
     }
 
     public function getInfos():array {

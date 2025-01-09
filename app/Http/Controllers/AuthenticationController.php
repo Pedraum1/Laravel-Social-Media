@@ -11,11 +11,10 @@ use App\Http\Requests\ResetPasswordRequest;
 
 use App\Mail\RegisterEmailConfirmation;
 use App\Mail\reset_password;
-use App\Models\UserModel;
-use App\Models\RecoverModel;
+use App\Models\User;
+use App\Models\Recover;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -28,8 +27,8 @@ class AuthenticationController extends Controller
         $email = $credentials['emailInput'];
         $password = $credentials['passwordInput'];
 
-        if(UserModel::thisLoginExists($email, $password)){
-            $user = UserModel::getUserByEmail($email);
+        if(User::thisLoginExists($email, $password)){
+            $user = User::getUserByEmail($email);
 
             if(!$user){
                 return redirect()->back()
@@ -79,8 +78,8 @@ class AuthenticationController extends Controller
         $email = $credentials['emailInput'];
         $token = (Str::random(32));
 
-        if(UserModel::getUserByEmail($email)){            
-            $new_recover = RecoverModel::create([
+        if(User::getUserByEmail($email)){            
+            $new_recover = Recover::create([
                 "email"=>$email,
                 "token"=>$token
             ]);
@@ -92,8 +91,8 @@ class AuthenticationController extends Controller
     }
 
     public function recoverPassword($token){
-        $recover = RecoverModel::where('token',$token)->where('expired_at',null)->first();
-        $user = UserModel::getAliveUser()->where('email',$recover->email)->first();
+        $recover = Recover::where('token',$token)->where('expired_at',null)->first();
+        $user = User::getAliveUser()->where('email',$recover->email)->first();
 
         if($recover)
         {
@@ -113,15 +112,15 @@ class AuthenticationController extends Controller
         $id = $credentials['idInput'];
         $password = $credentials['passwordInput'];
 
-        $user = UserModel::getAliveUser()->find(EncryptionClass::decryptId($id));
+        $user = User::getAliveUser()->find(EncryptionClass::decryptId($id));
         $user->updatePassword($password);
 
         return redirect()->route('login');
     }
 
-    private function createNewUser(array $credentials): UserModel{
+    private function createNewUser(array $credentials): User {
         
-        $user = UserModel::create($this->newUserInfos($credentials));
+        $user = User::create($this->newUserInfos($credentials));
 
         #this generates the noProfile images of user
         $user->banner_image;
@@ -145,13 +144,13 @@ class AuthenticationController extends Controller
         ];
     }
 
-    private function sendValidationEmailTo(UserModel $user): void{
+    private function sendValidationEmailTo(User $user): void{
         $confirmation_link = route('validation',['token'=>$user->validation_token]);
         Mail::to($user->email)->send(new RegisterEmailConfirmation($user->username,$confirmation_link));
     }
 
     private function validateUserEmail($token){
-        $user = UserModel::getNonValidatedUser($token);
+        $user = User::getNonValidatedUser($token);
         if($user){
             $user->update(["email_verified_at"=>Carbon::now()]);
             return $user;

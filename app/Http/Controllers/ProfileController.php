@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUpdateRequest;
-use App\Models\UserModel;
-use App\Models\ImageModel;
+use App\Models\User;
+use App\Models\Image;
 use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
 
     public function profile($tag){
-        $profile = UserModel::getUserByTag($tag);
+        $profile = User::getUserByTag($tag);
 
         if(empty($profile)){
             return redirect()->back();
@@ -23,13 +23,13 @@ class ProfileController extends Controller
 
     public function updateProfile(LoginUpdateRequest $request){
         $credentials = $request->validated();
-        $user = UserModel::getUserByTag(session('user.tag'));
+        $user = User::getUserByTag(session('user.tag'));
 
         $this->updateUserProfile($credentials,$user);
         return redirect()->back();
     }
 
-    private function ProfileData(UserModel $user){
+    private function ProfileData(User $user){
         return [
             'username'      => $user->username,
             'description'   => $user->description,
@@ -43,7 +43,7 @@ class ProfileController extends Controller
         ];
       }
 
-    private function updateUserProfile(array $credentials, UserModel $user):void{
+    private function updateUserProfile(array $credentials, User $user):void{
 
         $this->processImageUpdate($credentials, $user);
         $user->save([
@@ -55,12 +55,12 @@ class ProfileController extends Controller
         $this->updateSession($user);
     }
 
-    private function updateSession(UserModel $user):void{
+    private function updateSession(User $user):void{
         session()->forget('user');
         session(['user'=>$user->getInfos()]);
     }
 
-    private function processImageUpdate(array $credentials, UserModel $user): void {
+    private function processImageUpdate(array $credentials, User $user): void {
         if(!empty($credentials['profileInput'])){
             $this->updateProfileImage($credentials, $user);
         }
@@ -70,14 +70,14 @@ class ProfileController extends Controller
         }
     }
 
-    private function updateProfileImage(array $credentials, UserModel $user) {
-        $old_image = ImageModel::find($user->profile_image->id);
+    private function updateProfileImage(array $credentials, User $user) {
+        $old_image = Image::find($user->profile_image->id);
         $new_name = $this->storeNewImage($credentials);
         $old_image->update(["name"=>$new_name]);
     }
 
-    private function updateBannerImage(array $credentials, UserModel $user): void {
-        $old_image = ImageModel::find($user->banner_image->id);
+    private function updateBannerImage(array $credentials, User $user): void {
+        $old_image = Image::find($user->banner_image->id);
         $new_name = $this->storeNewImage($credentials);
         $old_image->update(["name"=>$new_name]);
     }
