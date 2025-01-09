@@ -22,7 +22,7 @@ class API{
 
     public static function error(string $error): JsonResponse{
         return response()->json(
-            ["Error"=>$error],
+            $error,
             500
         );
     }
