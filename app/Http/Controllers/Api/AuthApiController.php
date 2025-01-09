@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\LogoutRequest;
 use App\Http\Requests\RegisterRequest;
-
 use App\Mail\RegisterEmailConfirmation;
 
 use App\Models\User;
@@ -19,6 +18,7 @@ use Illuminate\Support\Str;
 
 class AuthApiController extends Controller
 {
+
     public function login(LoginRequest $request){
         $credentials = $request->validated();
 
@@ -52,6 +52,15 @@ class AuthApiController extends Controller
         ]);
     }
 
+    public function validateEmail($token){
+        $user = User::getNonValidatedUser($token);
+        if($user){
+            $user->update(["email_verified_at"=>Carbon::now()]);
+            return API::success($user->getApiInfos());
+        }
+        return API::failed("This token has expired");
+    }
+
     private function isLoginValid($email,$password): bool{
 
         if(User::thisLoginExists($email, $password)){
@@ -79,9 +88,10 @@ class AuthApiController extends Controller
     }
 
     private function sendValidationEmailTo(User $user): void{
-        $confirmation_link = route('validation',['token'=>$user->validation_token]);
-        Mail::to($user->email)->send(new RegisterEmailConfirmation($user->username,$confirmation_link));
-    }
+        $confirmation_link = route('validation_with_api',['token'=>$user->validation_token]);
+        Mail::to($user->email)
+            ->send(new RegisterEmailConfirmation($user->username,$confirmation_link));
+    } 
 
     private function newUserInfos($credentials):array{
         return [
