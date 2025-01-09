@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Classes\EncryptionClass;
-use App\Models\PostModel;
+use App\Models\Post;
 use Livewire\Component;
 
 class ReplyForm extends Component
@@ -13,7 +13,7 @@ class ReplyForm extends Component
 
     public function mount($post_id){
         $post_id = EncryptionClass::decryptId($post_id);
-        $this->original_post = PostModel::find($post_id);
+        $this->original_post = Post::find($post_id);
     }
     
     public function showReplyModal(){
@@ -27,7 +27,7 @@ class ReplyForm extends Component
             'textInput.required'=>'Você precisa escrever algo para escrever um post',
             'textInput.max'=>'O Tamanho máximo de um post é 150 caracteres'
         ]);
-        PostModel::createReply($this->textInput, $this->original_post->id);
+        Post::createReply($this->textInput, $this->original_post->id);
         $this->showReplyModal();
         return redirect()->route('seePost', EncryptionClass::encryptId($this->original_post->id));
     }

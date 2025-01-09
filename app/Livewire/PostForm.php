@@ -3,9 +3,7 @@
 namespace App\Livewire;
 
 use App\Classes\EncryptionClass;
-use App\Models\PostModel;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Support\Facades\Log;
+use App\Models\Post;
 use Livewire\Component;
 
 class PostForm extends Component
@@ -26,7 +24,7 @@ class PostForm extends Component
             'textInput.required'=>'Você precisa escrever algo para escrever um post',
             'textInput.max'=>'O Tamanho máximo de um post é 150 caracteres'
         ]);
-        $id = PostModel::createPost($this->textInput);
+        $id = Post::createPost($this->textInput);
         return redirect()->route('seePost',EncryptionClass::encryptId($id));
     }
     public function render()

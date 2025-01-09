@@ -22,7 +22,7 @@ class Post extends Model
     }
 
     public static function createPost($text){
-        $post = new PostModel();
+        $post = new Post();
         $user = User::getUserByTag(session('user.tag'));
 
         $post->user_id = $user->id;
@@ -37,7 +37,7 @@ class Post extends Model
     }
 
     public static function createReply($text,$post_id){
-        $reply = new PostModel();
+        $reply = new Post();
         $user = User::getUserByTag(session('user.tag'));
 
         $reply->user_id = $user->id;
@@ -47,7 +47,7 @@ class Post extends Model
 
         $reply->save();
 
-        $post = PostModel::find($post_id);
+        $post = Post::find($post_id);
         $post->comments += 1;
         $post->save();
     }

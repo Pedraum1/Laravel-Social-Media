@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Classes\EncryptionClass;
 use Livewire\Component;
-use App\Models\PostModel;
+use App\Models\Post as PostModel;
 use Carbon\Carbon;
 
 class Post extends Component
