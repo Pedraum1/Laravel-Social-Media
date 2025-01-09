@@ -80,27 +80,27 @@ class User extends Model
     //FEATURES FUNCTIONS
 
     public function profile_image(): HasOne {
-        $image = $this->hasOne(ImageModel::class,'source_id','id')
+        $image = $this->hasOne(Image::class,'source_id','id')
                       ->where('deleted_at',null)
                       ->where('type','profile');
                       
         if($image->exists()){
             return $image;
         }
-        ImageModel::generateNoProfileImage($this->id,"profile");
+        Image::generateNoProfileImage($this->id,"profile");
 
         return $this->profile_image();
     }
 
     public function banner_image(): HasOne {
-        $image = $this->hasOne(ImageModel::class,'source_id','id')
+        $image = $this->hasOne(Image::class,'source_id','id')
                       ->where('deleted_at',null)
                       ->where('type','banner');
 
         if($image->exists()){
             return $image;
         }
-        ImageModel::generateNoProfileImage($this->id,"banner");
+        Image::generateNoProfileImage($this->id,"banner");
 
         return $this->banner_image();
     }
