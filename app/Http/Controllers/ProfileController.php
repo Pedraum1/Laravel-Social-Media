@@ -16,7 +16,7 @@ class ProfileController extends Controller
         if(empty($profile)){
             return redirect()->back();
         }
-        $profile_data = $this->ProfileData($profile);
+        $profile_data = $this->profileData($profile);
 
         return view('profile',$profile_data);
     }
@@ -29,7 +29,7 @@ class ProfileController extends Controller
         return redirect()->back();
     }
 
-    private function ProfileData(User $user){
+    private function profileData(User $user){
         return [
             'username'      => $user->username,
             'description'   => $user->description,
@@ -37,8 +37,8 @@ class ProfileController extends Controller
             'followers_num' => $user->followersNumber,
             'following_num' => $user->followingNumber,
             'posts_num'     => $user->postsNumber,
-            'profile_img'   => $user->profile_image,
-            'banner_img'    => $user->banner_image,
+            'profile_img'   => $user->profile_image->name,
+            'banner_img'    => $user->banner_image->name,
             'posts'         => $user->posts
         ];
       }
