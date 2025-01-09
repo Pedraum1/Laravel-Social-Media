@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Classes\API;
-
+use App\Classes\EncryptionClass;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\LogoutRequest;
 use App\Http\Requests\RegisterRequest;
 
 use App\Mail\RegisterEmailConfirmation;
@@ -24,15 +25,21 @@ class AuthApiController extends Controller
         $email = $credentials['emailInput'];
         $password = $credentials['passwordInput'];
 
-        if(User::thisLoginExists($email, $password)){
+        if($this->isLoginValid($email,$password)){
             $user = User::getUserByEmail($email);
-
-            if(!$user){
-                return API::unauthorized();
-            }
-            
-            return API::success($user->getApiInfos());;
+            return API::success($user->getApiInfos());
         }
+
+        return API::unauthorized();
+    }
+
+    public function logout(LogoutRequest $credentials){
+        $user_id = $credentials['userIdInput'];
+        $user = User::find(EncryptionClass::decryptId($user_id));
+        $user->tokens()->delete();
+
+        return API::success(["message"=>"Logout successfull"]);
+        
     }
 
     public function register(RegisterRequest $request){
@@ -43,6 +50,19 @@ class AuthApiController extends Controller
         return API::success([
             "email_for_validation" => $user->email
         ]);
+    }
+
+    private function isLoginValid($email,$password): bool{
+
+        if(User::thisLoginExists($email, $password)){
+            $user = User::getUserByEmail($email);
+
+            if(!$user){
+                return false;
+            }
+            
+            return true;
+        }
     }
 
     private function createNewUser(array $credentials): User {
