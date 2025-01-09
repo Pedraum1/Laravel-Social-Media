@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ImageModel extends Model
+class Image extends Model
 {
   
   protected $table = 'images';
@@ -17,9 +17,9 @@ class ImageModel extends Model
   public static function processProfileImageUpdate(Request $request, UserModel $user){
     if($request->file('profileInput')){
       if(!empty($user->profile_image)){
-        ImageModel::updateImage($request, $user->profile_image->id,'profile');
+        Image::updateImage($request, $user->profile_image->id,'profile');
       } else {
-        ImageModel::createImage($request,$user->id,'profile');
+        Image::createImage($request,$user->id,'profile');
       }
     }
   }
@@ -27,16 +27,16 @@ class ImageModel extends Model
   public static function processBannerImageUpdate(Request $request, UserModel $user){
     if($request->file('bannerInput')){
       if(!empty($user->banner_image)){
-        ImageModel::updateImage($request, $user->banner_image->id,'banner');
+        Image::updateImage($request, $user->banner_image->id,'banner');
       } else {
-        ImageModel::createImage($request,$user->id,'banner');
+        Image::createImage($request,$user->id,'banner');
       }
     }
   }
   
   private static function createImage(Request $request, $source_id, $type){
     if($type=='profile'){
-      $image = new ImageModel();
+      $image = new Image();
       
       $new_image = $request->file('profileInput');
       $new_name = Carbon::now()->format('Y-m-d_H-i-s').'-'.$new_image->getClientOriginalName();
@@ -49,7 +49,7 @@ class ImageModel extends Model
       $image->save();
     }
     if($type='banner'){
-      $image = new ImageModel();
+      $image = new Image();
       
       $new_image = $request->file('bannerInput');
       $new_name = Carbon::now()->format('Y-m-d_H-i-s').'-'.$new_image->getClientOriginalName();
@@ -64,7 +64,7 @@ class ImageModel extends Model
   }
 
   private static function updateImage(Request $request, $id,$type){
-    $image = ImageModel::find($id);
+    $image = Image::find($id);
     if($type=='profile'){
       
       $old_image_path = 'images/'.$image->name;
@@ -98,7 +98,7 @@ class ImageModel extends Model
   }
 
   public static function generateNoProfileImage($user_id,$type){
-    $image = new ImageModel();
+    $image = new Image();
 
     $image->source_id = $user_id;
     $image->type = $type;
