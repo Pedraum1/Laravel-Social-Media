@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Classes\API;
-use App\Classes\EncryptionClass;
+use App\Classes\Encryption;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\LogoutRequest;
@@ -38,7 +38,7 @@ class AuthApiController extends Controller
 
     public function logout(LogoutRequest $credentials){
         $user_id = $credentials['userIdInput'];
-        $user = User::find(EncryptionClass::decryptId($user_id));
+        $user = User::find(Encryption::decrypt($user_id));
         $user->tokens()->delete();
 
         return API::success(["message"=>"Logout successfull"]);
@@ -56,7 +56,7 @@ class AuthApiController extends Controller
     }
 
     public function validateEmail($token){
-        $user = User::getNonValidatedUser($token);
+        $user = User::getNonValidatedUser(Encryption::decrypt($token));
         if($user){
             $user->update(["email_verified_at"=>Carbon::now()]);
             return API::success($user->getApiInfos());
@@ -127,7 +127,7 @@ class AuthApiController extends Controller
     }
 
     private function sendValidationEmailTo(User $user): void{
-        $confirmation_link = route('validation_with_api',['token'=>$user->validation_token]);
+        $token = Encryption::encrypt($user->validation_token);
         $confirmation_link = route('email_validation_with_api',['token'=>$token]);
         Mail::to($user->email)
             ->send(new RegisterEmailConfirmation($user->username,$confirmation_link));

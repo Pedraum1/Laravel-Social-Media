@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\EncryptionClass;
+use App\Classes\Encryption;
 use App\Models\Post;
 
 class MainController extends Controller
@@ -23,7 +23,7 @@ class MainController extends Controller
     }
 
     public function post($id){
-        $id = EncryptionClass::decryptId($id);
+        $id = Encryption::decrypt($id);
         $post = Post::find($id);
         if($post->getComments){
             return view('postPage',['post'=>$post,'comments'=>$post->getComments]);
@@ -32,7 +32,7 @@ class MainController extends Controller
     }
 
     public function deletePost($id){
-        $id = EncryptionClass::decryptId($id);
+        $id = Encryption::decrypt($id);
         $post = Post::find($id);
         $post->delete();
 
@@ -41,7 +41,7 @@ class MainController extends Controller
             $original_post->comments -= 1;
             $original_post->save();
 
-            return redirect()->route('seePost',EncryptionClass::encryptId($original_post->id));
+            return redirect()->route('seePost',Encryption::encrypt($original_post->id));
         }
 
         $post->owner->postsNumber -= 1;

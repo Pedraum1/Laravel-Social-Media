@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\EncryptionClass;
+use App\Classes\Encryption;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -99,7 +99,7 @@ class AuthenticationController extends Controller
         {
             $recover->expired_at = Carbon::now();
             $recover->save();
-            return redirect()->route('resetPassword',['id'=>EncryptionClass::encryptId($user->id)]);            
+            return redirect()->route('resetPassword',['id'=>Encryption::encrypt($user->id)]);            
         }
         return abort(404);
     }
@@ -113,7 +113,7 @@ class AuthenticationController extends Controller
         $id = $credentials['idInput'];
         $password = $credentials['passwordInput'];
 
-        $user = User::getAliveUser()->find(EncryptionClass::decryptId($id));
+        $user = User::getAliveUser()->find(Encryption::decrypt($id));
         $user->updatePassword($password);
 
         return redirect()->route('login');

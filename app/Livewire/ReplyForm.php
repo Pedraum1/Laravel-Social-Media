@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Classes\EncryptionClass;
+use App\Classes\Encryption;
 use App\Models\Post;
 use Livewire\Component;
 
@@ -12,7 +12,7 @@ class ReplyForm extends Component
     public $original_post,$textInput;
 
     public function mount($post_id){
-        $post_id = EncryptionClass::decryptId($post_id);
+        $post_id = Encryption::decrypt($post_id);
         $this->original_post = Post::find($post_id);
     }
     
@@ -29,7 +29,7 @@ class ReplyForm extends Component
         ]);
         Post::createReply($this->textInput, $this->original_post->id);
         $this->showReplyModal();
-        return redirect()->route('seePost', EncryptionClass::encryptId($this->original_post->id));
+        return redirect()->route('seePost', Encryption::encrypt($this->original_post->id));
     }
 
     public function render()

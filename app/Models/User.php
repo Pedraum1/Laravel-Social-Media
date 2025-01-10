@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Classes\EncryptionClass;
+use App\Classes\Encryption;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,11 +38,11 @@ class User extends Model
             return False;
         }
 
-        if($possible_user->email_verified_at != null){
-            return $possible_user;
+        if($possible_user->email_verified_at == null){
+            return False;
         }
 
-        return False;
+        return $possible_user;
     }
     
     public static function getAliveUser(){
@@ -68,7 +68,7 @@ class User extends Model
 
     public function getInfos():array {
         return [
-            'user_id'     => EncryptionClass::encryptId($this->id),
+            'user_id'     => Encryption::encrypt($this->id),
             'email'       => $this->email,
             'username'    => $this->username,
             'tag'         => $this->tag,
@@ -78,7 +78,7 @@ class User extends Model
 
     public function getApiInfos(): array {
         return[
-            'user_id'     => EncryptionClass::encryptId($this->id),
+            'user_id'     => Encryption::encrypt($this->id),
             "email"       => $this->email,
             "username"    => $this->username,
             "tag"         => $this->tag,
@@ -88,7 +88,7 @@ class User extends Model
     }
 
     public function updatePassword($new_password):void {
-        $this->save(["password"=>bcrypt($new_password)]);
+        $this->update(["password"=>bcrypt($new_password)]);
     }
 
     //FEATURES FUNCTIONS

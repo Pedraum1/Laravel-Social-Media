@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Classes\EncryptionClass;
+use App\Classes\Encryption;
 use App\Models\Post;
 use Livewire\Component;
 
@@ -25,7 +25,7 @@ class PostForm extends Component
             'textInput.max'=>'O Tamanho máximo de um post é 150 caracteres'
         ]);
         $id = Post::createPost($this->textInput);
-        return redirect()->route('seePost',EncryptionClass::encryptId($id));
+        return redirect()->route('seePost',Encryption::encrypt($id));
     }
     public function render()
     {

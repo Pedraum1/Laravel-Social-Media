@@ -6,9 +6,9 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Support\Facades\Crypt;
 
-class EncryptionClass{
+class Encryption{
 
-  public static function encryptId(int $id): string|null
+  public static function encrypt(int|string $id): string|null
   {
       try {
           $id = Crypt::encrypt($id);
@@ -18,7 +18,7 @@ class EncryptionClass{
       return $id;
   }
 
-  public static function decryptId(string $id): int|null
+  public static function decrypt(string $id): string|int|null
     {
         try {
             $id = Crypt::decrypt($id);
