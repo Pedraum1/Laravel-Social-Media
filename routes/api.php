@@ -18,4 +18,7 @@ Route::post('/login',[AuthApiController::class,'login']);
 Route::post('/register',[AuthApiController::class,'register']);
 Route::post('/logout',[AuthApiController::class,'logout']);
 Route::patch('/validate/{token}',[AuthApiController::class,'validateEmail'])
-     ->name('validation_with_api');
+     ->name('email_validation_with_api');
+
+Route::post('/require_password_reset',[AuthApiController::class,'requirePasswordReset']);
+Route::patch('/reset_password/{token}',[AuthApiController::class,'resetPassword']);
